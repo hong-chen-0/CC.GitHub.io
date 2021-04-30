@@ -69,6 +69,88 @@ class login extends React.Component {
 }
 
 export default login;
+```
 
+```markdown
+//redux使用
 
+//reducer/index.js
+
+import { createStore } from 'redux'  //  引入createStore方法
+import reducer from './reducer'    
+const store = createStore(
+    reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+) // 创建数据存储仓库
+export default store   //暴露出去
+
+//reducer/reducer.js
+
+const defaultState = {
+    inputValue : 'inputValue',
+}
+ //eslint-disable-next-line
+ export default (state = defaultState,action)=>{
+    switch (action.type) {
+        case 'changeInput':
+            let changeInput = JSON.parse(JSON.stringify(state)) //深度拷贝state
+            changeInput.inputValue = action.value
+            return changeInput    
+        default:
+            return state
+    }
+}
+
+//reducer/actionCreators.js
+
+export const changeInputValue=(value)=>({
+    type:'changeInput',
+    value
+})
+
+//page/listDetail
+
+import React from 'react';
+import store from '../../reducer'
+import {changeInputValue} from '../../reducer/actionCreators'
+
+class listDetail extends React.Component {
+  constructor(props) {
+		super(props);
+    this.state={
+      inputValue:store.getState().inputValue,
+    }
+    store.subscribe(this.storeChange) //订阅Redux的状态
+	}
+  storeChange=()=>{
+    this.setState(store.getState())
+  }
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }//在组件销毁的时候将异步方法撤销
+  changeInput=()=>{
+    const action = changeInputValue('改变的inputValue')
+    store.dispatch(action)
+  }
+  changeInput2=()=>{
+    const action = changeInputValue('再改变的inputValue')
+    store.dispatch(action)
+  }
+  render(){
+    return (
+      <div style={{'fontSize':'20px'}}>
+        pageIndex
+        <br/>
+        {this.state.inputValue}
+        <br/>
+        <button onClick={this.changeInput}>改变redux</button>
+        <button onClick={this.changeInput2}>再改变redux</button>
+      </div>
+    );
+  }
+}
+
+export default listDetail;
 ```
