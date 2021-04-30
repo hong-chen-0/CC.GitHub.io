@@ -73,7 +73,6 @@ class App extends React.Component  {
 
 export default App;
 
-
 ```
 
 ### axios,localStorage的使用
@@ -245,4 +244,5 @@ class listDetail extends React.Component {
 }
 
 export default listDetail;
+
 ```
