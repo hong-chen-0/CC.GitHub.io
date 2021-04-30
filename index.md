@@ -1,37 +1,70 @@
 ## Welcome to CC's page!
 
-Edit the page [GO](https://github.com/hong-chen-0/CC.GitHub.io/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Edit the page [GO](https://github.com/hong-chen-0/CC.GitHub.io/edit/gh-pages/index.md)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### REACT环境搭建流程
 
-### Markdown
+条件
+Node >= 10.16 和 npm >= 5.6，（配合云端硬盘react-demo文件使用）
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+安装REACT
+npx create-react-app my-app
+cd my-app
 
+安装ROUTER
+npm install react-router-dom --save-dev
+
+安装REDUX
+npm install --save redux
+
+安装axios
+npm install -save axios
 ```markdown
-Syntax highlighted code block
+//axios
 
-# Header 1
-## Header 2
-### Header 3
+class login extends React.Component {
+    constructor(props) {
+		super(props);
+        this.state={
+        }
+    }
+    goLogin=()=>{
+        let idData = "id="+ this.refs.loginID.value+"&"+"pw="+ this.refs.loginPW.value;
+        axios.post('/index.php',idData)
+            .then((res)=>{
+                console.log('axios 获取数据成功:'+JSON.stringify(res.data[0].router))
+                if(res.data[0].login == 'yes'){
+                    const token = res.data[0].token;
+                    localStorage.setItem('Tokenkey',token)
+                    localStorage.setItem('TokeyTime',Date())
+                    this.props.history.push(res.data[0].router)
+                }else{
+                    this.props.history.push(res.data[0].router)
+                }
+            })
+            .catch((error)=>{console.log('axios 获取数据失败'+error)})
+    }
+    render(){
+        return (
+        <div className='login-main'>
+            <div className='login-form flex-center'>
+                <div>
+                    账号登录
+                </div>
+                <div className='flex-middle'>
+                    账： <input ref='loginID'></input>
+                </div>
+                <div className='flex-middle'>
+                    密： <input ref='loginPW'></input>
+                </div>
+                <button onClick={this.goLogin}>登录</button>
+            </div>
+        </div>
+        );
+    }
+}
 
-- Bulleted
-- List
+export default login;
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hong-chen-0/CC.GitHub.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
