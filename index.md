@@ -306,7 +306,7 @@ class pageIndex extends React.Component {
   }
   //打开页面前检查STORE里的TOKEN和本地localStorage里的TOKEN是否一致
   componentDidMount(){
-    if(this.state.localToken.Tokenkey==localStorage.getItem("Tokenkey")){
+    if(this.state.localToken.Tokenkey===localStorage.getItem("Tokenkey")){
       return
     }else{
       this.props.history.push('/login')
