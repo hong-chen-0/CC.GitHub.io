@@ -22,6 +22,10 @@ npm install -save axios
 ```markdown
 //axios,localStorage的使用
 
+import React from 'react';
+import '../../assets/login.css'
+import axios from 'axios'
+
 class login extends React.Component {
     constructor(props) {
 		super(props);
