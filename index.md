@@ -20,6 +20,63 @@ npm install --save redux
 安装axios
 npm install -save axios
 
+### router的使用
+
+//index.js----------------------------------------------------------------------------
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+ReactDOM.render(
+    <App />,
+  document.getElementById('root')
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+
+//App.js----------------------------------------------------------------------------
+
+```markdown
+
+import React from 'react';
+import './assets/App.css';
+import { HashRouter as Router,Route,Switch,Redirect} from 'react-router-dom';
+import pageIndex from './views/page/pageIndex';
+import homeIndex from './views/home/homeIndex';
+
+class App extends React.Component  {
+  constructor(props) {
+    super(props);
+    this.state={
+    }
+  }
+  render(){
+    return (
+      <div className="App">
+          <Router>
+            <Switch>
+              <Route path="/pageIndex" component={pageIndex} />
+              <Route path="/homeIndex" component={homeIndex} /> 
+              <Redirect from="/*" to="/pageIndex" />
+            </Switch>
+          </Router>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+```
+
 ### axios,localStorage的使用
 
 ```markdown
