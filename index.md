@@ -49,6 +49,7 @@ import './assets/App.css';
 import { HashRouter as Router,Route,Switch,Redirect} from 'react-router-dom';
 import pageIndex from './views/page/pageIndex';
 import homeIndex from './views/home/homeIndex';
+import login from './views/login/login';
 
 class App extends React.Component  {
   constructor(props) {
@@ -62,8 +63,9 @@ class App extends React.Component  {
           <Router>
             <Switch>
               <Route path="/pageIndex" component={pageIndex} />
-              <Route path="/homeIndex" component={homeIndex} /> 
-              <Redirect from="/*" to="/pageIndex" />
+              <Route path="/homeIndex" component={homeIndex} />
+              <Route path="/login" component={login} />
+              <Redirect from="/*" to="/login" />
             </Switch>
           </Router>
       </div>
@@ -73,22 +75,36 @@ class App extends React.Component  {
 
 export default App;
 
+
 ```
 
 ### axios,localStorage的使用
 
 ```markdown
 
-//page/login.js----------------------------------------------------------------------------
+//login/login.js----------------------------------------------------------------------------
 
 import React from 'react';
 import '../../assets/login.css'
 import axios from 'axios'
+import store from '../../reducer';
+import {changeToken} from '../../reducer/actionCreators'
 
 class login extends React.Component {
     constructor(props) {
 		super(props);
         this.state={
+            localToken:store.getState().localToken,
+        }
+        store.subscribe(this.storeChange) //订阅Redux的状态
+    }
+    storeChange=()=>{
+        this.setState(store.getState())
+    }
+    //在组件销毁的时候将异步方法撤销
+    componentWillUnmount() {
+        this.setState = (state, callback) => {
+            return
         }
     }
     goLogin=()=>{
@@ -102,9 +118,14 @@ class login extends React.Component {
             .then((res)=>{
                 console.log('axios 获取数据成功:'+JSON.stringify(res.data[0].router))
                 if(res.data[0].login === 'yes'){
+                    //存储TOKEN到本地localStorage
                     const token = res.data[0].token;
                     localStorage.setItem('Tokenkey',token)
                     localStorage.setItem('TokeyTime',Date())
+                    //存储TOKEN到STORE
+                    const action = changeToken({'Tokenkey':token,'TokeyTime':Date()})
+                    store.dispatch(action)
+                    //路由跳转
                     this.props.history.push(res.data[0].router)
                 }else{
                     this.props.history.push(res.data[0].router)
@@ -117,7 +138,7 @@ class login extends React.Component {
         <div className='login-main'>
             <div className='login-form flex-center'>
                 <div>
-                    HAYA商家端登录
+                    HAYA商家端登录{this.state.localToken.Tokenkey}{this.state.localToken.TokeyTime}
                 </div>
                 <div className='flex-middle'>
                     账： <input ref='loginID'></input>
@@ -150,7 +171,7 @@ if($id=='HC' && $pw=='HC'){
     $res = '/homeIndex';
     $login = 'yes';
 }else{
-    $res = '/pageIndex';
+    $res = '/login';
     $login = 'no';
 }
 
@@ -179,6 +200,10 @@ export default store   //暴露出去
 
 const defaultState = {
     inputValue : 'inputValue',
+    localToken:{
+        Tokenkey:'',
+        TokeyTime:''
+    }
 }
  //eslint-disable-next-line
  export default (state = defaultState,action)=>{
@@ -187,6 +212,10 @@ const defaultState = {
             let changeInput = JSON.parse(JSON.stringify(state)) //深度拷贝state
             changeInput.inputValue = action.value
             return changeInput    
+        case 'changeToken':
+            let changeToken = JSON.parse(JSON.stringify(state)) //深度拷贝state
+            changeToken.localToken = action.value
+            return changeToken       
         default:
             return state
     }
@@ -196,6 +225,10 @@ const defaultState = {
 
 export const changeInputValue=(value)=>({
     type:'changeInput',
+    value
+})
+export const changeToken=(value)=>({
+    type:'changeToken',
     value
 })
 
