@@ -78,7 +78,7 @@ export default App;
 
 ```
 
-### axios,localStorage的使用
+### axios,localStorage,token的使用
 
 ```markdown
 
@@ -232,7 +232,7 @@ export const changeToken=(value)=>({
     value
 })
 
-//page/listDetail----------------------------------------------------------------------------
+//page/listDetail.js（展示及改变STORE）--------------------------------------------------------
 
 import React from 'react';
 import store from '../../reducer'
@@ -277,5 +277,54 @@ class listDetail extends React.Component {
 }
 
 export default listDetail;
+
+//page/pageIndex.js(在路由分支注入TOKEN路由守卫)--------------------------------------------------
+
+import React from 'react';
+import { Route,Switch,Redirect} from 'react-router-dom';
+import listDetail from './listDetail';
+import underWayList from './underWayList';
+import store from '../../reducer';
+
+class pageIndex extends React.Component {
+  constructor(props) {
+		super(props);
+    this.state={
+        localToken:store.getState().localToken,
+    }
+    //订阅Redux的状态
+    store.subscribe(this.storeChange)
+  }
+  storeChange=()=>{
+    this.setState(store.getState())
+  }
+  //在组件销毁的时候将异步方法撤销
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+        return
+    }
+  }
+  //打开页面前检查STORE里的TOKEN和本地localStorage里的TOKEN是否一致
+  componentDidMount(){
+    if(this.state.localToken.Tokenkey==localStorage.getItem("Tokenkey")){
+      return
+    }else{
+      this.props.history.push('/login')
+    }
+  }
+  render(){
+      return (
+      <div>
+        <Switch>
+          <Route path="/pageIndex/listDetail" component={listDetail} />
+          <Route path="/pageIndex/underWayList" component={underWayList} />
+          <Redirect from="/pageIndex" to="/pageIndex/listDetail" />
+        </Switch>
+      </div>
+      );
+  }
+}
+
+export default pageIndex;
 
 ```
