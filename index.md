@@ -138,7 +138,7 @@ class login extends React.Component {
         <div className='login-main'>
             <div className='login-form flex-center'>
                 <div>
-                    HAYA商家端登录{this.state.localToken.Tokenkey}{this.state.localToken.TokeyTime}
+                    HAYA商家端登录
                 </div>
                 <div className='flex-middle'>
                     账： <input ref='loginID'></input>
