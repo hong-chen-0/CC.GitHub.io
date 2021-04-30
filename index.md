@@ -23,6 +23,9 @@ npm install -save axios
 ### axios,localStorage的使用
 
 ```markdown
+
+//page/login.js----------------------------------------------------------------------------
+
 import React from 'react';
 import '../../assets/login.css'
 import axios from 'axios'
@@ -34,11 +37,16 @@ class login extends React.Component {
         }
     }
     goLogin=()=>{
-        let idData = "id="+ this.refs.loginID.value+"&"+"pw="+ this.refs.loginPW.value;
+        let arr ={
+            'id' : this.refs.loginID.value,
+            'pw' : this.refs.loginPW.value,
+        }
+        let idData = "contentAll="+JSON.stringify(arr);
+        //let idData = "id="+ this.refs.loginID.value+"&"+"pw="+ this.refs.loginPW.value;
         axios.post('/index.php',idData)
             .then((res)=>{
                 console.log('axios 获取数据成功:'+JSON.stringify(res.data[0].router))
-                if(res.data[0].login == 'yes'){
+                if(res.data[0].login === 'yes'){
                     const token = res.data[0].token;
                     localStorage.setItem('Tokenkey',token)
                     localStorage.setItem('TokeyTime',Date())
@@ -54,7 +62,7 @@ class login extends React.Component {
         <div className='login-main'>
             <div className='login-form flex-center'>
                 <div>
-                    账号登录
+                    HAYA商家端登录
                 </div>
                 <div className='flex-middle'>
                     账： <input ref='loginID'></input>
@@ -70,12 +78,39 @@ class login extends React.Component {
 }
 
 export default login;
+
+//index.php----------------------------------------------------------------------------
+
+<?php
+
+$data = json_decode($_POST["contentAll"]);
+
+$id = $data->id;
+$pw = $data->pw;
+
+$res;
+$login;
+
+if($id=='HC' && $pw=='HC'){
+    $res = '/homeIndex';
+    $login = 'yes';
+}else{
+    $res = '/pageIndex';
+    $login = 'no';
+}
+
+$list = array(
+    array("login" => $login,"router" => $res, "token"=>'dgdg436gsdfg35vbddsd345')
+);
+
+echo json_encode($list);
+
 ```
 
 ### redux的使用
 
 ```markdown
-//reducer/index.js
+//reducer/index.js----------------------------------------------------------------------------
 
 import { createStore } from 'redux'  //  引入createStore方法
 import reducer from './reducer'    
@@ -85,7 +120,7 @@ const store = createStore(
 ) // 创建数据存储仓库
 export default store   //暴露出去
 
-//reducer/reducer.js
+//reducer/reducer.js----------------------------------------------------------------------------
 
 const defaultState = {
     inputValue : 'inputValue',
@@ -102,14 +137,14 @@ const defaultState = {
     }
 }
 
-//reducer/actionCreators.js
+//reducer/actionCreators.js----------------------------------------------------------------------------
 
 export const changeInputValue=(value)=>({
     type:'changeInput',
     value
 })
 
-//page/listDetail
+//page/listDetail----------------------------------------------------------------------------
 
 import React from 'react';
 import store from '../../reducer'
