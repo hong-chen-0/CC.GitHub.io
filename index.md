@@ -20,7 +20,7 @@ npm install --save redux
 安装axios
 npm install -save axios
 ```markdown
-//axios
+//axios,localStorage的使用
 
 class login extends React.Component {
     constructor(props) {
