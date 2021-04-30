@@ -22,6 +22,8 @@ npm install -save axios
 
 ### router的使用
 
+```markdown
+
 //index.js----------------------------------------------------------------------------
 
 import React from 'react';
@@ -40,10 +42,7 @@ ReactDOM.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-
 //App.js----------------------------------------------------------------------------
-
-```markdown
 
 import React from 'react';
 import './assets/App.css';
