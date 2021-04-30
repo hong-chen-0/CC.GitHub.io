@@ -19,9 +19,10 @@ npm install --save redux
 
 安装axios
 npm install -save axios
-```markdown
-//axios,localStorage的使用
 
+### axios,localStorage的使用
+
+```markdown
 import React from 'react';
 import '../../assets/login.css'
 import axios from 'axios'
@@ -71,9 +72,9 @@ class login extends React.Component {
 export default login;
 ```
 
-```markdown
-//redux使用
+### redux的使用
 
+```markdown
 //reducer/index.js
 
 import { createStore } from 'redux'  //  引入createStore方法
