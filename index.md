@@ -2,6 +2,8 @@
 
 Edit the page [GO](https://github.com/hong-chen-0/CC.GitHub.io/edit/gh-pages/index.md)
 
+View the page [GO](https://hong-chen-0.github.io/CC.GitHub.io/)
+
 ### REACT环境搭建流程
 
 条件
